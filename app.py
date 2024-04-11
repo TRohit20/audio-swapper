@@ -1,5 +1,5 @@
 import streamlit as st
-from brain import extract_audio
+from brain import extract_audio, extract_transcript_from_audio
 
 with st.sidebar:
     st.markdown("### Audio Swapper")
@@ -10,8 +10,10 @@ with st.sidebar:
 st.markdown("# Audio Swapper")
 # st.markdown("### Enter a YT Video URL")
 URL = st.text_input("Enter a Video URL:", placeholder="https://www.youtube.com/watch?v=************")
-button = st.button("Extract Audio!")
+button = st.button("Extract Transcript!")
 
 if button:
     with st.spinner("Extracting Audio"):
-        audio = extract_audio(url=URL)
+        audio_file_path, video_id = extract_audio(url=URL)
+        transcript = extract_transcript_from_audio(file_path=audio_file_path,video_id=video_id)
+
