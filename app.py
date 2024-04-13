@@ -17,5 +17,7 @@ if button:
         audio_file_path, video_id = extract_audio(url=URL)
         transcript_filepath = extract_transcript_from_audio(file_path=audio_file_path,video_id=video_id)
         translated_text_filepath = translate_to_hindi(transcript_filepath)
-        st.markdown(translated_text_filepath)
+        with open(translated_text_filepath, "r") as file:
+            translated_text = file.read()
+        st.markdown(translated_text)
 

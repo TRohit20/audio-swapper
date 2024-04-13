@@ -4,7 +4,7 @@ from moviepy.editor import AudioFileClip
 from pytube import YouTube
 from openai import OpenAI
 from dotenv import load_dotenv
-import goslate
+import requests
 
 load_dotenv()
 
@@ -63,13 +63,27 @@ def extract_transcript_from_audio(file_path, video_id):
         print("exiting transcription function")
 
 def translate_to_hindi(file_path: str):
-    translator = goslate.Goslate()
+
     with open(file_path, "r") as file:
         content = file.read()
-        translation = translator.translate(content, 'hi')
-    
+        # text translator API URL
+        url = "https://text-translator2.p.rapidapi.com/translate"
+        payload = {
+            "source_language": "en",
+            "target_language": "hi",
+            "text": content
+        }
+        headers = {
+            "content-type": "application/x-www-form-urlencoded",
+            "X-RapidAPI-Key": os.environ.get("RAPIDAPI_KEY"),
+            "X-RapidAPI-Host": "text-translator2.p.rapidapi.com"
+        }
+
+        translation = requests.post(url, data=payload, headers=headers)
+        translated_text = translation.json()['data']['translatedText']
+
     translated_file_path = file_path.replace(".txt", "_translated.txt")
     with open(translated_file_path, 'w') as translated_file:
-        translated_file.write(translation)
+        translated_file.write(translated_text)
     
     return translated_file_path
