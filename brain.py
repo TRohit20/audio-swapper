@@ -4,6 +4,7 @@ from moviepy.editor import AudioFileClip
 from pytube import YouTube
 from openai import OpenAI
 from dotenv import load_dotenv
+import goslate
 
 load_dotenv()
 
@@ -55,7 +56,20 @@ def extract_transcript_from_audio(file_path, video_id):
 
             # Deleting the mp3 file
             # os.remove(file_path)
+            return transcript_filepath
         else:
             print("Please provide a smaller audio file (less than 25mb).")
 
         print("exiting transcription function")
+
+def translate_to_hindi(file_path: str):
+    translator = goslate.Goslate()
+    with open(file_path, "r") as file:
+        content = file.read()
+        translation = translator.translate(content, 'hi')
+    
+    translated_file_path = file_path.replace(".txt", "_translated.txt")
+    with open(translated_file_path, 'w') as translated_file:
+        translated_file.write(translation)
+    
+    return translated_file_path

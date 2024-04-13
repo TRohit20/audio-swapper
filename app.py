@@ -1,5 +1,5 @@
 import streamlit as st
-from brain import extract_audio, extract_transcript_from_audio
+from brain import extract_audio, extract_transcript_from_audio, translate_to_hindi
 
 with st.sidebar:
     st.markdown("### Audio Swapper")
@@ -15,5 +15,7 @@ button = st.button("Extract Transcript!")
 if button:
     with st.spinner("Extracting Audio"):
         audio_file_path, video_id = extract_audio(url=URL)
-        transcript = extract_transcript_from_audio(file_path=audio_file_path,video_id=video_id)
+        transcript_filepath = extract_transcript_from_audio(file_path=audio_file_path,video_id=video_id)
+        translated_text_filepath = translate_to_hindi(transcript_filepath)
+        st.markdown(translated_text_filepath)
 
